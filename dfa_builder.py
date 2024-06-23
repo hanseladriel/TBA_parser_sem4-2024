@@ -41,3 +41,33 @@ class DFA:
                 return False
             current_state = current_state.transitions[symbol]
         return current_state.accepting
+
+class DFABuilder:
+    def from_config(config):
+        dfa = DFA(config["input_alphabet"])
+        DFABuilder._add_states(dfa, config["states"])
+        DFABuilder._add_transitions(dfa, config["transitions"])
+        DFABuilder._add_trap_state(dfa)
+        dfa.set_initial_state(config["initial_state"])
+        DFABuilder._set_accepting_states(dfa, config["accepting_states"])
+        return dfa
+
+    def _add_states(dfa, states):
+        for state in states:
+            dfa.add_state(state)
+    
+    def _add_transitions(dfa, transitions):
+        for state, state_transitions in transitions.items():
+            for symbol, next_state in state_transitions.items():
+                dfa.add_transition(state, symbol, next_state)
+
+    def _add_trap_state(dfa):
+        trap_state = dfa.add_state("trap")
+        for state in dfa.states.values():
+            for symbol in dfa.input_alphabet:
+                if symbol not in state.transitions:
+                    state.add_transition(symbol, trap_state)
+
+    def _set_accepting_states(dfa, accepting_states):
+        for state in accepting_states:
+            dfa.set_accepting_state(state)
