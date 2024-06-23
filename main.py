@@ -9,20 +9,20 @@ def main():
     with open('dfa_config.json') as f:
         config = json.load(f)
 
-    subject_dfa = DFABuilder.from_config(config["subjek"])
-    predicate_dfa = DFABuilder.from_config(config["predikat"])
-    object_dfa = DFABuilder.from_config(config["objek"])
-    adverb_dfa = DFABuilder.from_config(config["keterangan"])
-
+    subjek_dfa = DFABuilder.from_config(config["subjek"])
+    predikat_dfa = DFABuilder.from_config(config["predikat"])
+    objek_dfa = DFABuilder.from_config(config["objek"])
+    keterangan_dfa = DFABuilder.from_config(config["keterangan"])
+    
     tokens = []
     for word in words:
-        if subject_dfa.simulate(word):
+        if subjek_dfa.simulate(word):
             tokens.append('S')
-        elif predicate_dfa.simulate(word):
+        elif predikat_dfa.simulate(word):
             tokens.append('P')
-        elif object_dfa.simulate(word):
+        elif objek_dfa.simulate(word):
             tokens.append('O')
-        elif adverb_dfa.simulate(word):
+        elif keterangan_dfa.simulate(word):
             tokens.append('K')
         else:
             print(f"Unknown word: {word}")
